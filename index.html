@@ -1724,7 +1724,7 @@
 
     <script>
         // API Base URL
-        const API_BASE_URL = 'http://localhost/univoice/backend/api';
+       const API_BASE_URL = '/.netlify/functions';
 
         // Department and program data
         const departmentPrograms = {
@@ -1995,30 +1995,15 @@
                             details: document.getElementById('complaintDetails').value
                         };
                         
-                        // Simulate API call
-                        setTimeout(() => {
-                            const complaintId = 'COMP-' + Math.floor(10000 + Math.random() * 90000);
-                            
-                            // Show complaint ID at the bottom
-                            complaintIdValue.textContent = complaintId;
-                            complaintIdDisplay.style.display = 'flex';
-                            
-                            showToast(`Complaint submitted successfully. Your complaint ID is: ${complaintId}`);
-                            complaintForm.reset();
-                            programSelect.disabled = true;
-                            
-                            submitBtn.innerHTML = originalText;
-                            submitBtn.disabled = false;
-                        }, 1500);
-                        
-                    } catch (error) {
-                        console.error('Complaint submission error:', error);
-                        submitBtn.innerHTML = originalText;
-                        submitBtn.disabled = false;
-                    }
-                }
-            });
-        }
+                       const result = await apiRequest('submitComplaint', 'POST', formData);
+
+// Show complaint ID back to user
+complaintIdValue.textContent = result.complaintId;
+complaintIdDisplay.style.display = 'block';
+
+showToast('Complaint submitted successfully!');
+this.reset();
+
 
         if (loginForm) {
             loginForm.addEventListener('submit', async function(e) {
@@ -2794,4 +2779,5 @@
         });
     </script>
 </body>
+
 </html>
