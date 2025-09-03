@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lecturer Login</title>
+  <style>
+    /* General Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Orbitron", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: radial-gradient(circle at top, #0f0f0f, #000000);
+      color: #fff;
+      overflow: hidden;
+    }
+
+    /* Container */
+    .container {
+      text-align: center;
+      padding: 20px;
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    /* Futuristic Glow */
+    .glow {
+      font-size: 2.5rem;
+      color: cyan;
+      text-shadow: 0 0 10px cyan, 0 0 20px #0ff, 0 0 40px cyan;
+      margin-bottom: 15px;
+    }
+
+    .tagline {
+      margin-bottom: 30px;
+      font-size: 1.2rem;
+      color: #aaa;
+    }
+
+    /* Login Form */
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      max-width: 350px;
+      margin: auto;
+    }
+
+    input {
+      padding: 12px;
+      border-radius: 10px;
+      border: 2px solid cyan;
+      background: #111;
+      color: white;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    input:focus {
+      box-shadow: 0 0 12px cyan;
+    }
+
+    .btn {
+      padding: 12px;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 10px;
+      background: cyan;
+      color: black;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background: #00eaff;
+      box-shadow: 0 0 15px cyan, 0 0 40px cyan;
+    }
+
+    .error {
+      color: red;
+      font-size: 0.9rem;
+      display: none;
+    }
+
+    /* Back Link */
+    .back-link {
+      display: inline-block;
+      margin-top: 20px;
+      color: cyan;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .back-link:hover {
+      text-shadow: 0 0 8px cyan;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="glow">Lecturer Login</h1>
+    <p class="tagline">Only authorized lecturers can access complaints.</p>
+
+    <form class="login-form" id="loginForm">
+      <input type="text" id="username" placeholder="Enter Username" required>
+      <input type="password" id="password" placeholder="Enter Password" required>
+      <button type="submit" class="btn">Login</button>
+      <p class="error" id="errorMsg">Invalid username or password!</p>
+    </form>
+
+    <a href="index.html" class="back-link">⬅ Back to Homepage</a>
+  </div>
+
+  <script>
+    const loginForm = document.getElementById("loginForm");
+    const errorMsg = document.getElementById("errorMsg");
+
+    loginForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      // Example static login (you can later connect to a real backend)
+      if(username === "lecturer" && password === "secure123") {
+        window.location.href = "view.html"; // Redirect to lecturer complaints page
+      } else {
+        errorMsg.style.display = "block";
+      }
+    });
+  </script>
+</body>
+</html>
