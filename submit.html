@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Submit Complaint</title>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+       /* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Orbitron", sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at top, #0f0f0f, #000000);
+  color: #fff;
+  overflow-x: hidden;
+  flex-direction: column;
+}
+
+/* Container */
+.container {
+  text-align: center;
+  padding: 20px;
+  animation: fadeIn 2s ease-in-out;
+}
+
+/* Futuristic Glow */
+.glow {
+  font-size: 2.5rem;
+  color: cyan;
+  text-shadow: 0 0 10px cyan, 0 0 20px #0ff, 0 0 40px cyan;
+  margin-bottom: 15px;
+}
+
+.tagline {
+  margin-bottom: 30px;
+  font-size: 1.2rem;
+  color: #aaa;
+}
+
+/* Menu */
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.menu-item {
+  padding: 15px 25px;
+  background: transparent;
+  border: 2px solid cyan;
+  border-radius: 12px;
+  font-size: 1.2rem;
+  color: cyan;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.menu-item:hover {
+  background: cyan;
+  color: #000;
+  transform: scale(1.05);
+  box-shadow: 0 0 15px cyan, 0 0 40px cyan;
+}
+
+/* Complaint Form */
+.complaint-form,
+#complaintForm {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+textarea, input, select {
+  padding: 15px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  resize: none;
+  font-size: 1rem;
+  background: #111;
+  color: white;
+  border: 2px solid cyan;
+}
+
+.btn {
+  padding: 12px;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 10px;
+  background: cyan;
+  color: black;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn:hover {
+  background: #00eaff;
+  box-shadow: 0 0 15px cyan, 0 0 40px cyan;
+}
+
+/* Complaint List */
+.complaints-list {
+  list-style: none;
+  margin-top: 20px;
+  text-align: left;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.complaint {
+  background: rgba(0, 255, 255, 0.1);
+  border-left: 4px solid cyan;
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 8px;
+  animation: slideUp 1s ease-in-out;
+}
+
+/* Back Link */
+.back-link {
+  display: inline-block;
+  margin-top: 25px;
+  color: cyan;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.back-link:hover {
+  text-shadow: 0 0 8px cyan;
+}
+
+/* Card + hero */
+.hero {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.card {
+  background: rgba(0, 255, 255, 0.05);
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 600px;
+}
+
+.anonymous-note {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  color: #aaa;
+}
+
+.anonymous-note i {
+  color: cyan;
+  font-size: 1.5rem;
+}
+
+.error {
+  color: red;
+  font-size: 0.9rem;
+  display: none;
+}
+
+/* Complaint ID Display */
+.complaint-id-display {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid cyan;
+  background: rgba(0,255,255,0.1);
+}
+
+.success-icon {
+  color: lime;
+  font-size: 1.5rem;
+  margin-right: 8px;
+}
+
+.complaint-id-value {
+  color: cyan;
+  font-weight: bold;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+  </style>
+</head>
+<body class="submit-page">
+
+  <div class="container">
+    <h1 class="glow">Submit Your Complaint</h1>
+    <strong>Complete Anonymity Guaranteed</strong>
+
+    <!-- Simple Form -->
+    <form class="complaint-form">
+    </form>
+    <a href="index.html" class="back-link">⬅ Back to Homepage</a>
+  </div>
+
+  <!-- Submit Complaint Page -->
+  <div id="submit-complaint-page" class="page-content">
+      <section class="hero">
+          <div class="hero-content">
+              <p>Your identity is completely protected. Speak up about issues that matter to you.</p>
+          </div>
+      </section>
+
+      <section class="card">
+          <div class="anonymous-note">
+              <i class="fas fa-user-secret"></i>
+              <div>
+                  <p>We don't store any personal data or tracking information.</p>
+              </div>
+          </div>
+          <form id="complaintForm">
+              <div class="form-group">
+                  <label for="department">Department</label>
+                  <select id="department" required>
+                      <option value="">Select Department</option>
+                      <option value="engineering">Engineering</option>
+                      <option value="business">Business Administration</option>
+                      <option value="applied">Applied Sciences</option>
+                  </select>
+                  <div class="error" id="department-error">Please select a department</div>
+              </div>
+
+              <div class="form-group">
+                  <label for="program">Program</label>
+                  <select id="program" required>
+                      <option value="">Select Program</option>
+                  </select>
+                  <div class="error" id="program-error">Please select a program</div>
+              </div>
+
+              <div class="form-group">
+                  <label for="complaintTitle">Complaint Title</label>
+                  <input type="text" id="complaintTitle" placeholder="Brief title of your complaint" required>
+                  <div class="error" id="complaintTitle-error">Please enter a complaint title</div>
+              </div>
+
+              <div class="form-group">
+                  <label for="complaintDetails">Complaint Details</label>
+                  <textarea id="complaintDetails" placeholder="Please describe your complaint in detail..." required></textarea>
+                  <div class="error" id="complaintDetails-error">Please provide complaint details</div>
+              </div>
+
+              <button type="submit" class="btn btn-block" id="submitComplaintBtn">
+                  <i class="fas fa-paper-plane"></i> Submit Anonymously
+              </button>
+          </form>
+          
+          <!-- Complaint ID Display Area -->
+          <div id="complaintIdDisplay" class="complaint-id-display" style="display: none;">
+              <i class="fas fa-check-circle success-icon"></i>
+              <div>
+                  <strong>Complaint Submitted Successfully!</strong>
+                  <p>Your complaint ID is: <span id="complaintIdValue" class="complaint-id-value"></span></p>
+                  <p>Please save this ID to check your complaint status later.</p>
+              </div>
+          </div>
+      </section>
+  </div>
+
+  <script>
+    // Simple form handling
+    document.querySelector(".complaint-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      alert("Your complaint has been submitted anonymously!");
+      e.target.reset();
+    });
+
+    // Detailed form handling
+    const department = document.getElementById("department");
+    const program = document.getElementById("program");
+    const complaintForm = document.getElementById("complaintForm");
+    const complaintIdDisplay = document.getElementById("complaintIdDisplay");
+    const complaintIdValue = document.getElementById("complaintIdValue");
+
+    // Populate program options based on department
+    department.addEventListener("change", () => {
+      program.innerHTML = "<option value=''>Select Program</option>";
+      if (department.value === "engineering") {
+        program.innerHTML += "<option value='software'>Software Engineering</option><option value='civil'>Civil Engineering</option>";
+      } else if (department.value === "business") {
+        program.innerHTML += "<option value='accounting'>Accounting</option><option value='management'>Management</option>";
+      } else if (department.value === "applied") {
+        program.innerHTML += "<option value='computer'>Computer Science</option><option value='biology'>Biology</option>";
+      }
+    });
+
+    // Handle detailed form submit
+    complaintForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      // Generate random complaint ID
+      const complaintId = "CMP-" + Math.floor(1000 + Math.random() * 9000);
+
+      // Show success message
+      complaintIdValue.textContent = complaintId;
+      complaintIdDisplay.style.display = "block";
+
+      // Reset form
+      complaintForm.reset();
+      program.innerHTML = "<option value=''>Select Program</option>";
+    });
+  </script>
+</body>
+</html>
