@@ -29,6 +29,7 @@ exports.handler = async (event, context) => {
       title: data.title,
       details: data.details,
       createdAt: new Date()
+      status: "pending"
     });
 
     return {
