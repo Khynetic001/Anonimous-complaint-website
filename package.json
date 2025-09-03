@@ -9,6 +9,9 @@
   "license": "ISC",
   "keywords": [],
   "description": "",
+  "dependencies": {
+    "validator": "^13.11.0"
+  },
   "devDependencies": {
     "@11ty/eleventy": "^3.1.2"
   }
