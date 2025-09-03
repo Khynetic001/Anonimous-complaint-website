@@ -28,7 +28,7 @@ exports.handler = async (event, context) => {
       program: data.program,
       title: data.title,
       details: data.details,
-      createdAt: new Date()
+      createdAt: new Date(),
       status: "pending"
     });
 
