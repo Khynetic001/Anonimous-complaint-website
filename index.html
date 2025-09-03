@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anonymous Complaint Portal</title>
+  <style>
+    /* General Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Orbitron", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      background: radial-gradient(circle at top, #0f0f0f, #000000);
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    /* Container */
+    .container {
+      text-align: center;
+      padding: 40px 20px;
+      animation: fadeIn 2s ease-in-out;
+     max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+    
+    /* Futuristic Glow */
+    .glow {
+      font-size: 2.5rem;
+      color: cyan;
+      text-shadow: 0 0 10px cyan, 0 0 20px #0ff, 0 0 40px cyan;
+      margin-bottom: 15px;
+    }
+
+    .tagline {
+      margin-bottom: 30px;
+      font-size: 1.2rem;
+      color: #aaa;
+    }
+
+    /* Menu */
+    .menu {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-bottom: 40px;
+    }
+
+    .menu-item {
+      padding: 15px 25px;
+      background: transparent;
+      border: 2px solid cyan;
+      border-radius: 12px;
+      font-size: 1.2rem;
+      color: cyan;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    .menu-item:hover {
+      background: cyan;
+      color: #000;
+      transform: scale(1.05);
+      box-shadow: 0 0 15px cyan, 0 0 40px cyan;
+    }
+
+    /* Sections */
+    section {
+      max-width: 900px;
+      padding: 40px 20px;
+      margin: 20px auto;
+      text-align: center;
+      border-radius: 15px;
+      background: rgba(0, 255, 255, 0.05);
+      border: 1px solid rgba(0, 255, 255, 0.2);
+      box-shadow: 0 0 10px rgba(0, 255, 255, 0.1);
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    section h2 {
+      color: cyan;
+      margin-bottom: 15px;
+      font-size: 1.8rem;
+      text-shadow: 0 0 5px cyan;
+    }
+
+    section p {
+      font-size: 1.1rem;
+      color: #ccc;
+      line-height: 1.6;
+    }
+ /* Card Styles */
+        .card {
+            background: rgba(0, 255, 255, 0.419);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: var(--transition);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .card:hover {
+            box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.953);
+            transform: scale(1.02);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-title i {
+            color: var(--primary);
+        }
+
+    /* Footer */
+    footer {
+      width: 100%;
+      text-align: center;
+      padding: 20px;
+      margin-top: 30px;
+      border-top: 1px solid rgba(0, 255, 255, 0.2);
+      background: rgba(0, 0, 0, 0.7);
+      color: #888;
+      font-size: 0.9rem;
+    }
+
+    footer span {
+      color: cyan;
+      font-weight: bold;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+     
+  </style>
+</head>
+<body class="homepage">
+
+  <div class="container">
+    <h1 class="glow">Anonymous Complaint Portal</h1>
+    <p class="tagline">Speak freely. Stay anonymous. Be heard.</p>
+
+    <div class="menu">
+      <a href="submit.html" class="menu-item">1. Submit Complaint</a>
+      <a href="Lecturerlogin.html" class="menu-item">2. Lecturer View Complaints</a>
+    </div>
+  </div>
+
+  <!-- About Section -->
+  <section>
+    <h2>Why This Portal?</h2>
+    <p>
+      This platform was created to give students a safe space to raise issues, 
+      concerns, or suggestions about their school environment. 
+      From teaching methods to facilities, your voice matters, 
+      and your complaints will help create a better learning experience.
+    </p>
+  </section>
+
+  <!-- Anonymity Section -->
+  <section>
+    <h2>Guaranteed Anonymity</h2>
+    <p>
+      Your identity is 100% protected. No personal information is collected, 
+      and no one can trace your complaint back to you. 
+      Speak freely without fear of judgment or punishment.
+    </p>
+  </section>
+
+   <!-- Home Page -->
+        <div id="home-page" class="page-content active">
+            <section class="hero">
+                <div class="hero-content">
+                    <h2>Your Voice Matters</h2>
+                    <p>"Speak your mind even if your voice shakes. Your feedback can create positive change in our institution."</p>
+                    <p>Welcome to UniVoice, the anonymous complaint system where students can share their concerns without fear.</p>
+                    <button class="btn" id="get-started-btn">Get Started <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </section>
+
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-info-circle"></i> How It Works</h2>
+                <div class="auth-container">
+                    <div class="card">
+                        <h3 class="card-title"><i class="fas fa-user-graduate"></i> For Students</h3>
+                        <p>Submit complaints anonymously and check their status without revealing your identity.</p>
+                        <ul style="padding-left: 1.5rem; margin-top: 1rem;">
+                            <li>Complete anonymity guaranteed</li>
+                            <li>No tracking of your identity</li>
+                            <li>Check status with your complaint ID</li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <h3 class="card-title"><i class="fas fa-chalkboard-teacher"></i> For Lecturers</h3>
+                        <p>Manage complaints, track status, and analyze feedback to improve the institution.</p>
+                        <ul style="padding-left: 1.5rem; margin-top: 1rem;">
+                            <li>Review and approve complaints</li>
+                            <li>Analyze complaint trends</li>
+                            <li>Post general notices</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+  <!-- Footer -->
+  <footer>
+    <p>© <span>2025 Anonymous Complaint Portal</span> | Designed for students’ voices to be heard</p>
+  </footer>
+
+</body>
+</html>
