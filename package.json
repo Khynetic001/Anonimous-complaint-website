@@ -10,7 +10,8 @@
   "keywords": [],
   "description": "",
   "dependencies": {
-    "validator": "^13.11.0"
+    "validator": "^13.11.0",
+    "mongodb": "^6.8.0"
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.1.2"
