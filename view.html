@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lecturer Complaints Dashboard</title>
+  <style>
+    /* General Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Orbitron", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: radial-gradient(circle at top, #0f0f0f, #000000);
+      color: #fff;
+      overflow: auto;
+    }
+
+    /* Container */
+    .container {
+      text-align: center;
+      padding: 20px;
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    /* Futuristic Glow */
+    .glow {
+      font-size: 2.5rem;
+      color: cyan;
+      text-shadow: 0 0 10px cyan, 0 0 20px #0ff, 0 0 40px cyan;
+      margin-bottom: 15px;
+    }
+
+    .tagline {
+      margin-bottom: 30px;
+      font-size: 1.2rem;
+      color: #aaa;
+    }
+
+    /* Sidebar + Dashboard */
+    .dashboard-container {
+      display: flex;
+      margin-top: 20px;
+      gap: 20px;
+    }
+
+    .sidebar {
+      width: 220px;
+      background: rgba(0, 255, 255, 0.05);
+      padding: 15px;
+      border-radius: 12px;
+      border: 1px solid cyan;
+    }
+
+    .sidebar-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .user-avatar {
+      background: cyan;
+      color: black;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      margin: 0 auto 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+    }
+
+    .user-details h3 {
+      font-size: 1.1rem;
+      margin-bottom: 5px;
+    }
+
+    .user-details p {
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+
+    .sidebar-menu {
+      list-style: none;
+      margin-top: 10px;
+    }
+
+    .sidebar-menu li {
+      margin: 10px 0;
+    }
+
+    .sidebar-menu a {
+      color: cyan;
+      text-decoration: none;
+      font-size: 1rem;
+      display: block;
+      padding: 8px;
+      border-radius: 8px;
+      transition: 0.3s;
+    }
+
+    .sidebar-menu a:hover,
+    .sidebar-menu a.active {
+      background: cyan;
+      color: black;
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      border: 1px solid cyan;
+    }
+
+    /* Stats */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: rgba(0, 255, 255, 0.1);
+      border: 1px solid cyan;
+      border-radius: 10px;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .stat-info h3 {
+      font-size: 1.5rem;
+      margin-bottom: 5px;
+    }
+
+    .complaints-list {
+      list-style: none;
+    }
+
+    .complaint {
+      background: rgba(0, 255, 255, 0.1);
+      border-left: 4px solid cyan;
+      padding: 12px;
+      margin: 8px 0;
+      border-radius: 8px;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1 class="glow">Lecturer Complaints Dashboard</h1>
+    
+    <div class="dashboard-container">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <div class="sidebar-header">
+          <div class="user-avatar">DR</div>
+          <div class="user-details">
+            <h3>Lecturer</h3>
+            <p>Computer Science Department</p>
+          </div>
+        </div>
+        <ul class="sidebar-menu">
+          <li><a href="#" class="active">Dashboard</a></li>
+          <li><a href="#">Approved</a></li>
+          <li><a href="#">Pending</a></li>
+          <li><a href="#">Rejected</a></li>
+          <li><a href="#">Analysis</a></li>
+         
+          <li><a href="index.html">Logout</a></li>
+        </ul>
+      </div>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-info">
+              <h3>3</h3>
+              <p>Total Complaints</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-info">
+              <h3>1</h3>
+              <p>Approved</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-info">
+              <h3>1</h3>
+              <p>Pending</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-info">
+              <h3>1</h3>
+              <p>Rejected</p>
+            </div>
+          </div>
+        </div>
+
+        <h2>Recent Complaints</h2>
+        <ul class="complaints-list">
+          <li class="complaint">Complaint 1: Lectures start late frequently.</li>
+          <li class="complaint">Complaint 2: Classrooms are overcrowded.</li>
+          <li class="complaint">Complaint 3: Need more practical sessions.</li>
+        </ul>
+      </div>
+    </div>
+
+    <a href="index.html" class="back-link">⬅ Back to Homepage</a>
+  </div>
+
+</body>
+</html>
