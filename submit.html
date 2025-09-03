@@ -284,47 +284,68 @@ textarea, input, select {
   </div>
 
   <script>
-    // Simple form handling
-    document.querySelector(".complaint-form").addEventListener("submit", function(e) {
-      e.preventDefault();
-      alert("Your complaint has been submitted anonymously!");
-      e.target.reset();
-    });
+  // DOM references
+  const department = document.getElementById("department");
+  const program = document.getElementById("program");
+  const complaintForm = document.getElementById("complaintForm");
+  const complaintIdDisplay = document.getElementById("complaintIdDisplay");
+  const complaintIdValue = document.getElementById("complaintIdValue");
 
-    // Detailed form handling
-    const department = document.getElementById("department");
-    const program = document.getElementById("program");
-    const complaintForm = document.getElementById("complaintForm");
-    const complaintIdDisplay = document.getElementById("complaintIdDisplay");
-    const complaintIdValue = document.getElementById("complaintIdValue");
+  // Populate program options based on department
+  department.addEventListener("change", () => {
+    program.innerHTML = "<option value=''>Select Program</option>";
+    if (department.value === "engineering") {
+      program.innerHTML += "<option value='software'>Software Engineering</option><option value='civil'>Civil Engineering</option>";
+    } else if (department.value === "business") {
+      program.innerHTML += "<option value='accounting'>Accounting</option><option value='management'>Management</option>";
+    } else if (department.value === "applied") {
+      program.innerHTML += "<option value='computer'>Computer Science</option><option value='biology'>Biology</option>";
+    }
+  });
 
-    // Populate program options based on department
-    department.addEventListener("change", () => {
-      program.innerHTML = "<option value=''>Select Program</option>";
-      if (department.value === "engineering") {
-        program.innerHTML += "<option value='software'>Software Engineering</option><option value='civil'>Civil Engineering</option>";
-      } else if (department.value === "business") {
-        program.innerHTML += "<option value='accounting'>Accounting</option><option value='management'>Management</option>";
-      } else if (department.value === "applied") {
-        program.innerHTML += "<option value='computer'>Computer Science</option><option value='biology'>Biology</option>";
+  // Handle complaint form submit
+  complaintForm.addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    // Generate random complaint ID
+    const complaintId = "CMP-" + Math.floor(1000 + Math.random() * 9000);
+
+    // Collect data
+    const complaintData = {
+      complaintId: complaintId,
+      department: department.value,
+      program: program.value,
+      title: document.getElementById("complaintTitle").value,
+      details: document.getElementById("complaintDetails").value,
+    };
+
+    try {
+      // Send data to Netlify Function
+      const res = await fetch("/.netlify/functions/submitComplaint", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(complaintData),
+      });
+
+      const result = await res.json();
+
+      if (res.ok) {
+        // Show success with complaint ID
+        complaintIdValue.textContent = complaintId;
+        complaintIdDisplay.style.display = "block";
+
+        // Reset form
+        complaintForm.reset();
+        program.innerHTML = "<option value=''>Select Program</option>";
+      } else {
+        alert("Error: " + (result.message || "Could not submit complaint"));
       }
-    });
+    } catch (err) {
+      alert("Network error: " + err.message);
+    }
+  });
+</script>
 
-    // Handle detailed form submit
-    complaintForm.addEventListener("submit", function(e) {
-      e.preventDefault();
-
-      // Generate random complaint ID
-      const complaintId = "CMP-" + Math.floor(1000 + Math.random() * 9000);
-
-      // Show success message
-      complaintIdValue.textContent = complaintId;
-      complaintIdDisplay.style.display = "block";
-
-      // Reset form
-      complaintForm.reset();
-      program.innerHTML = "<option value=''>Select Program</option>";
-    });
-  </script>
 </body>
 </html>
+
