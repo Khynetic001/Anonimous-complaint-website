@@ -30,7 +30,6 @@
       animation: fadeIn 2s ease-in-out;
     }
 
-    /* Futuristic Glow */
     .glow {
       font-size: 2.5rem;
       color: cyan;
@@ -38,24 +37,17 @@
       margin-bottom: 15px;
     }
 
-    .tagline {
-      margin-bottom: 30px;
-      font-size: 1.2rem;
-      color: #aaa;
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      color: cyan;
+      text-decoration: none;
+      font-weight: bold;
     }
-    /* Back Link */
-.back-link {
-  display: inline-block;
-  margin-top: 25px;
-  color: cyan;
-  text-decoration: none;
-  font-weight: bold;
-}
 
-.back-link:hover {
-  text-shadow: 0 0 8px cyan;
-}
-
+    .back-link:hover {
+      text-shadow: 0 0 8px cyan;
+    }
 
     /* Sidebar + Dashboard */
     .dashboard-container {
@@ -133,27 +125,6 @@
       border: 1px solid cyan;
     }
 
-    /* Stats */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 15px;
-      margin-bottom: 20px;
-    }
-
-    .stat-card {
-      background: rgba(0, 255, 255, 0.1);
-      border: 1px solid cyan;
-      border-radius: 10px;
-      padding: 15px;
-      text-align: center;
-    }
-
-    .stat-info h3 {
-      font-size: 1.5rem;
-      margin-bottom: 5px;
-    }
-
     .complaints-list {
       list-style: none;
     }
@@ -166,12 +137,26 @@
       border-radius: 8px;
     }
 
-    /* Animations */
+    button {
+      margin-top: 10px;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      background: cyan;
+      color: black;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background: #00eaff;
+      box-shadow: 0 0 15px cyan, 0 0 40px cyan;
+    }
+
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
   </style>
 </head>
 <body>
@@ -179,7 +164,6 @@
   <div class="container">
     <h1 class="glow">Lecturer Complaints Dashboard</h1>
     
-   
     <div class="dashboard-container">
       <!-- Sidebar -->
       <div class="sidebar">
@@ -196,38 +180,34 @@
           <li><a href="#">Pending</a></li>
           <li><a href="#">Rejected</a></li>
           <li><a href="#">Analysis</a></li>
-         
           <li><a href="index.html">Logout</a></li>
         </ul>
       </div>
 
       <!-- Main Content -->
-       <div class="main-content" id="mainContent">
-  <h2 id="sectionTitle">Recent Complaints</h2>
-  <div id="complaintsContainer">
-    <!-- Complaints will be loaded dynamically here -->
+      <div class="main-content" id="mainContent">
+        <h2 id="sectionTitle">Recent Complaints</h2>
+        <div id="complaintsContainer"></div>
+      </div>
+    </div>
+
+    <a href="index.html" class="back-link">⬅ Back to Homepage</a>
   </div>
-</div>
-
-
-
 
 <script>
-const complaintsList = document.getElementById("complaintsList");
-const mainContent = document.getElementById("mainContent");
 let allComplaints = [];
 
-// Fetch complaints from Netlify backend
+// Fetch complaints from backend
 async function fetchComplaints() {
   const res = await fetch("/.netlify/functions/getComplaints");
   allComplaints = await res.json();
   showDashboard();
 }
 
-// Show Dashboard (all complaints, title + details)
+// Dashboard → show all complaints (title + details)
 function showDashboard() {
-  mainContent.innerHTML = "<h2>Recent Complaints</h2><ul id='complaintsList' class='complaints-list'></ul>";
-  const list = document.getElementById("complaintsList");
+  mainContent.innerHTML = "<h2>Recent Complaints</h2><ul class='complaints-list'></ul>";
+  const list = mainContent.querySelector("ul");
   allComplaints.forEach(c => {
     const li = document.createElement("li");
     li.className = "complaint";
@@ -236,7 +216,7 @@ function showDashboard() {
   });
 }
 
-// Show Approved
+// Approved → id + title + Approve button
 function showApproved() {
   mainContent.innerHTML = "<h2>Approved Complaints</h2>";
   allComplaints.filter(c => c.status === "approved").forEach(c => {
@@ -251,7 +231,7 @@ function showApproved() {
   });
 }
 
-// Show Pending (latest complaint only)
+// Pending → show latest only (title + details + buttons)
 function showPending() {
   mainContent.innerHTML = "<h2>Latest Pending Complaint</h2>";
   const pending = allComplaints.filter(c => c.status === "pending");
@@ -259,14 +239,19 @@ function showPending() {
     const latest = pending[0];
     const div = document.createElement("div");
     div.className = "complaint";
-    div.innerHTML = `<strong>${latest.title}</strong><br>${latest.details}`;
+    div.innerHTML = `
+      <strong>${latest.title}</strong><br>${latest.details}
+      <br>
+      <button onclick="updateComplaint('${latest._id}', 'approve')">Approve</button>
+      <button onclick="updateComplaint('${latest._id}', 'reject')">Reject</button>
+    `;
     mainContent.appendChild(div);
   } else {
     mainContent.innerHTML += "<p>No pending complaints.</p>";
   }
 }
 
-// Show Rejected
+// Rejected → id + details + Delete button
 function showRejected() {
   mainContent.innerHTML = "<h2>Rejected Complaints</h2>";
   allComplaints.filter(c => c.status === "rejected").forEach(c => {
@@ -281,7 +266,7 @@ function showRejected() {
   });
 }
 
-// Show Analysis (full list)
+// Analysis → full list
 function showAnalysis() {
   mainContent.innerHTML = "<h2>Complaint Analysis</h2>";
   allComplaints.forEach(c => {
@@ -301,25 +286,45 @@ function showAnalysis() {
   });
 }
 
-// Action: mark complaint under investigation
-async function markUnderInvestigation(id) {
-  await fetch("/.netlify/functions/updateComplaint", {
+// === Actions ===
+
+// Update complaint (approve/reject)
+async function updateComplaint(id, action) {
+  const res = await fetch("/.netlify/functions/updateComplaint", {
     method: "POST",
-    body: JSON.stringify({ id, status: "under investigation" })
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ id, action })
   });
+  const result = await res.json();
+  alert(result.message);
   fetchComplaints();
 }
 
-// Action: delete complaint
-async function deleteComplaint(id) {
-  await fetch("/.netlify/functions/deleteComplaint", {
+// Mark under investigation (Approved section button)
+async function markUnderInvestigation(id) {
+  const res = await fetch("/.netlify/functions/updateComplaint", {
     method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ id, action: "under investigation" })
+  });
+  const result = await res.json();
+  alert("Complaint marked as under investigation");
+  fetchComplaints();
+}
+
+// Delete complaint
+async function deleteComplaint(id) {
+  const res = await fetch("/.netlify/functions/deleteComplaint", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ id })
   });
+  const result = await res.json();
+  alert("Complaint deleted");
   fetchComplaints();
 }
 
-// Sidebar menu click handlers
+// Sidebar menu
 document.querySelectorAll(".sidebar-menu a").forEach(link => {
   link.addEventListener("click", (e) => {
     e.preventDefault();
@@ -338,7 +343,5 @@ document.querySelectorAll(".sidebar-menu a").forEach(link => {
 fetchComplaints();
 </script>
 
-
 </body>
 </html>
-
