@@ -280,6 +280,32 @@ textarea, input, select {
                   <p>Please save this ID to check your complaint status later.</p>
               </div>
           </div>
+        <!-- === Complaint Status Search Section === -->
+<div class="card" style="margin-top:30px;">
+  <h3 style="color:cyan; margin-bottom:15px;">Check Complaint Status</h3>
+  <form id="searchForm" class="complaint-form">
+    <input 
+      type="text" 
+      id="searchComplaintId" 
+      placeholder="Enter your Complaint ID (e.g., CMP-1234)" 
+      required>
+    <button type="submit" class="btn">
+      <i class="fas fa-search"></i> Search
+    </button>
+  </form>
+
+  <!-- Results display -->
+  <div id="searchResult" class="complaint-id-display" style="display:none; margin-top:15px;">
+    <i class="fas fa-info-circle success-icon"></i>
+    <div>
+      <p><strong>Complaint ID:</strong> <span id="resultComplaintId"></span></p>
+      <p><strong>Title:</strong> <span id="resultTitle"></span></p>
+      <p><strong>Status:</strong> <span id="resultStatus"></span></p>
+      <p><strong>Created At:</strong> <span id="resultCreatedAt"></span></p>
+    </div>
+  </div>
+</div>
+
       </section>
   </div>
 
@@ -343,9 +369,51 @@ textarea, input, select {
     } catch (err) {
       alert("Network error: " + err.message);
     }
+  }); // ✅ CLOSE complaintForm submit handler properly
+
+  // === Complaint Status Search ===
+  const searchForm = document.getElementById("searchForm");
+  const searchComplaintId = document.getElementById("searchComplaintId");
+  const searchResult = document.getElementById("searchResult");
+
+  const resultComplaintId = document.getElementById("resultComplaintId");
+  const resultTitle = document.getElementById("resultTitle");
+  const resultStatus = document.getElementById("resultStatus");
+  const resultCreatedAt = document.getElementById("resultCreatedAt");
+
+  searchForm.addEventListener("submit", async function(e) {
+    e.preventDefault();
+    const id = searchComplaintId.value.trim();
+
+    if (!id) return;
+
+    try {
+      const res = await fetch("/.netlify/functions/getComplaintById", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ complaintId: id })
+      });
+
+      const result = await res.json();
+
+      if (res.ok && result) {
+        resultComplaintId.textContent = result.complaintId;
+        resultTitle.textContent = result.title;
+        resultStatus.textContent = result.status;
+        resultCreatedAt.textContent = new Date(result.createdAt).toLocaleString();
+
+        searchResult.style.display = "block";
+      } else {
+        alert("Complaint not found. Please check your ID.");
+        searchResult.style.display = "none";
+      }
+    } catch (err) {
+      alert("Network error: " + err.message);
+    }
   });
 </script>
 
 </body>
 </html>
+
 
