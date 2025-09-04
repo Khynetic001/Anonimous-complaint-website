@@ -1,12 +1,15 @@
-// netlify/functions/updateComplaint.js
 const { MongoClient, ObjectId } = require("mongodb");
-
 const uri = process.env.MONGO_URI;
 const client = new MongoClient(uri);
 
 exports.handler = async (event) => {
   try {
-    const { id, status } = JSON.parse(event.body);
+    const { id, action } = JSON.parse(event.body);
+
+    // Map frontend actions to statuses
+    let status = action;
+    if (action === "approve") status = "approved";
+    if (action === "reject") status = "rejected";
 
     await client.connect();
     const db = client.db("complaintsDB");
@@ -18,7 +21,7 @@ exports.handler = async (event) => {
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ success: true, message: "Complaint updated" }),
+      body: JSON.stringify({ success: true, message: `Complaint ${status}` }),
     };
   } catch (error) {
     return {
