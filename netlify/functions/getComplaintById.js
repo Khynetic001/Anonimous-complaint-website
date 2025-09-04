@@ -1,29 +1,47 @@
-const mongoose = require("mongoose");
-const Complaint = require("./models/Complaint"); // your schema
+// netlify/functions/getComplaintById.js
+const { MongoClient } = require("mongodb");
+
+const uri = process.env.MONGO_URI;
+const client = new MongoClient(uri);
 
 exports.handler = async (event) => {
   try {
     const { complaintId } = JSON.parse(event.body);
 
     if (!complaintId) {
-      return { statusCode: 400, body: JSON.stringify({ message: "Complaint ID required" }) };
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ error: "complaintId is required" }),
+      };
     }
 
-    // connect to DB (ensure mongoose connection utility is used)
-    await mongoose.connect(process.env.MONGODB_URI);
-
-    const complaint = await Complaint.findOne({ complaintId });
+    await client.connect();
+    const db = client.db("complaintsDB");
+    const complaint = await db.collection("complaints").findOne({ complaintId });
 
     if (!complaint) {
-      return { statusCode: 404, body: JSON.stringify({ message: "Complaint not found" }) };
+      return {
+        statusCode: 404,
+        body: JSON.stringify({ error: "Complaint not found" }),
+      };
     }
 
+    // Return only safe fields
     return {
       statusCode: 200,
-      body: JSON.stringify(complaint)
+      body: JSON.stringify({
+        complaintId: complaint.complaintId,
+        title: complaint.title,
+        status: complaint.status || "pending", // default if not set
+        createdAt: complaint.createdAt,
+      }),
     };
-
-  } catch (err) {
-    return { statusCode: 500, body: JSON.stringify({ message: err.message }) };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: error.message }),
+    };
+  } finally {
+    await client.close();
   }
 };
