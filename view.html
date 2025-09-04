@@ -213,131 +213,132 @@
 
 
 <script>
-  const complaintsContainer = document.getElementById("complaintsContainer");
-  const sectionTitle = document.getElementById("sectionTitle");
-  const sidebarLinks = document.querySelectorAll(".sidebar-menu a");
+const complaintsList = document.getElementById("complaintsList");
+const mainContent = document.getElementById("mainContent");
+let allComplaints = [];
 
-  // Fetch complaints from Netlify Function (MongoDB)
-  async function fetchComplaints() {
-    const res = await fetch("/.netlify/functions/getComplaints");
-    return await res.json();
-  }
+// Fetch complaints from Netlify backend
+async function fetchComplaints() {
+  const res = await fetch("/.netlify/functions/getComplaints");
+  allComplaints = await res.json();
+  showDashboard();
+}
 
-  // Render complaints
-  function renderComplaints(complaints, mode) {
-    complaintsContainer.innerHTML = "";
-
-    if (mode === "dashboard") {
-      sectionTitle.textContent = "Recent Complaints";
-      complaints.forEach(c => {
-        const div = document.createElement("div");
-        div.classList.add("complaint");
-        div.innerHTML = `<h3>${c.title}</h3><p>${c.details}</p>`;
-        complaintsContainer.appendChild(div);
-      });
-    }
-
-    if (mode === "approved") {
-      sectionTitle.textContent = "Approved Complaints";
-      complaints.filter(c => c.status === "approved").forEach(c => {
-        const div = document.createElement("div");
-        div.classList.add("complaint");
-        div.innerHTML = `
-          <p><strong>ID:</strong> ${c.complaintId}</p>
-          <h3><strong>${c.title}</strong></h3>
-          <button onclick="markUnderInvestigation('${c._id}')">Approve</button>
-        `;
-        complaintsContainer.appendChild(div);
-      });
-    }
-
-    if (mode === "pending") {
-      sectionTitle.textContent = "Pending Complaint";
-      const latest = complaints
-        .filter(c => c.status === "pending")
-        .sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt))
-        .slice(0,1);
-      latest.forEach(c => {
-        const div = document.createElement("div");
-        div.classList.add("complaint");
-        div.innerHTML = `<h3>${c.title}</h3><p>${c.details}</p>`;
-        complaintsContainer.appendChild(div);
-      });
-    }
-
-    if (mode === "rejected") {
-      sectionTitle.textContent = "Rejected Complaints";
-      complaints.filter(c => c.status === "rejected").forEach(c => {
-        const div = document.createElement("div");
-        div.classList.add("complaint");
-        div.innerHTML = `
-          <p><strong>ID:</strong> ${c._id}</p>
-          <p>${c.details}</p>
-          <button onclick="deleteComplaint('${c._id}')">Delete</button>
-        `;
-        complaintsContainer.appendChild(div);
-      });
-    }
-
-    if (mode === "analysis") {
-      sectionTitle.textContent = "Complaints Analysis";
-      complaints.forEach(c => {
-        const div = document.createElement("div");
-        div.classList.add("complaint");
-        div.innerHTML = `
-          <p><strong>_id:</strong> ${c._id}</p>
-          <p><strong>complaintId:</strong> ${c.complaintId}</p>
-          <p><strong>Department:</strong> ${c.department}</p>
-          <p><strong>Program:</strong> ${c.program}</p>
-          <p><strong>Title:</strong> ${c.title}</p>
-          <p><strong>Details:</strong> ${c.details}</p>
-          <p><strong>Created At:</strong> ${c.createdAt}</p>
-        `;
-        complaintsContainer.appendChild(div);
-      });
-    }
-  }
-
-  // Sidebar navigation
-  sidebarLinks.forEach(link => {
-    link.addEventListener("click", async (e) => {
-      e.preventDefault();
-      sidebarLinks.forEach(l => l.classList.remove("active"));
-      link.classList.add("active");
-
-      const mode = link.textContent.trim().toLowerCase();
-      const complaints = await fetchComplaints();
-      renderComplaints(complaints, mode);
-    });
+// Show Dashboard (all complaints, title + details)
+function showDashboard() {
+  mainContent.innerHTML = "<h2>Recent Complaints</h2><ul id='complaintsList' class='complaints-list'></ul>";
+  const list = document.getElementById("complaintsList");
+  allComplaints.forEach(c => {
+    const li = document.createElement("li");
+    li.className = "complaint";
+    li.innerHTML = `<strong>${c.title}</strong><br>${c.details}`;
+    list.appendChild(li);
   });
+}
 
-  // Actions
-  async function markUnderInvestigation(id) {
-    await fetch("/.netlify/functions/updateComplaint", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, status: "under investigation" })
-    });
-    alert("Complaint marked under investigation");
-    location.reload();
+// Show Approved
+function showApproved() {
+  mainContent.innerHTML = "<h2>Approved Complaints</h2>";
+  allComplaints.filter(c => c.status === "approved").forEach(c => {
+    const div = document.createElement("div");
+    div.className = "complaint";
+    div.innerHTML = `
+      <p><strong>ID:</strong> ${c._id}</p>
+      <p><strong>${c.title}</strong></p>
+      <button onclick="markUnderInvestigation('${c._id}')">Approve</button>
+    `;
+    mainContent.appendChild(div);
+  });
+}
+
+// Show Pending (latest complaint only)
+function showPending() {
+  mainContent.innerHTML = "<h2>Latest Pending Complaint</h2>";
+  const pending = allComplaints.filter(c => c.status === "pending");
+  if (pending.length > 0) {
+    const latest = pending[0];
+    const div = document.createElement("div");
+    div.className = "complaint";
+    div.innerHTML = `<strong>${latest.title}</strong><br>${latest.details}`;
+    mainContent.appendChild(div);
+  } else {
+    mainContent.innerHTML += "<p>No pending complaints.</p>";
   }
+}
 
-  async function deleteComplaint(id) {
-    await fetch("/.netlify/functions/deleteComplaint", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id })
-    });
-    alert("Complaint deleted");
-    location.reload();
-  }
+// Show Rejected
+function showRejected() {
+  mainContent.innerHTML = "<h2>Rejected Complaints</h2>";
+  allComplaints.filter(c => c.status === "rejected").forEach(c => {
+    const div = document.createElement("div");
+    div.className = "complaint";
+    div.innerHTML = `
+      <p><strong>ID:</strong> ${c._id}</p>
+      <p>${c.details}</p>
+      <button onclick="deleteComplaint('${c._id}')">Delete</button>
+    `;
+    mainContent.appendChild(div);
+  });
+}
 
-  // Load dashboard by default
-  (async () => {
-    const complaints = await fetchComplaints();
-    renderComplaints(complaints, "dashboard");
-  })();
+// Show Analysis (full list)
+function showAnalysis() {
+  mainContent.innerHTML = "<h2>Complaint Analysis</h2>";
+  allComplaints.forEach(c => {
+    const div = document.createElement("div");
+    div.className = "complaint";
+    div.innerHTML = `
+      <p><strong>_id:</strong> ${c._id}</p>
+      <p><strong>complaintId:</strong> ${c.complaintId}</p>
+      <p><strong>Department:</strong> ${c.department}</p>
+      <p><strong>Program:</strong> ${c.program}</p>
+      <p><strong>Title:</strong> ${c.title}</p>
+      <p><strong>Details:</strong> ${c.details}</p>
+      <p><strong>Status:</strong> ${c.status}</p>
+      <p><strong>CreatedAt:</strong> ${c.createdAt}</p>
+    `;
+    mainContent.appendChild(div);
+  });
+}
+
+// Action: mark complaint under investigation
+async function markUnderInvestigation(id) {
+  await fetch("/.netlify/functions/updateComplaint", {
+    method: "POST",
+    body: JSON.stringify({ id, status: "under investigation" })
+  });
+  fetchComplaints();
+}
+
+// Action: delete complaint
+async function deleteComplaint(id) {
+  await fetch("/.netlify/functions/deleteComplaint", {
+    method: "POST",
+    body: JSON.stringify({ id })
+  });
+  fetchComplaints();
+}
+
+// Sidebar menu click handlers
+document.querySelectorAll(".sidebar-menu a").forEach(link => {
+  link.addEventListener("click", (e) => {
+    e.preventDefault();
+    document.querySelectorAll(".sidebar-menu a").forEach(a => a.classList.remove("active"));
+    link.classList.add("active");
+
+    if (link.textContent === "Dashboard") showDashboard();
+    if (link.textContent === "Approved") showApproved();
+    if (link.textContent === "Pending") showPending();
+    if (link.textContent === "Rejected") showRejected();
+    if (link.textContent === "Analysis") showAnalysis();
+  });
+});
+
+// Initial load
+fetchComplaints();
 </script>
+
 
 </body>
 </html>
+
